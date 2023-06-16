@@ -60,14 +60,14 @@ func (c *DPFMAPICaller) Header(
 	errs *[]error,
 	log *logger.Logger,
 ) *[]dpfm_api_output_formatter.Header {
-	if input.Header.Product == nil || input.Header.OwnerBusinessPartner == nil || input.Header.OwnerPlant == nil {
+	if input.Header.Product == nil || input.Header.OwnerProductionBusinessPartner == nil || input.Header.OwnerProductionPlant == nil {
 		err := xerrors.New("入力ファイルのProductまたはOwnerBusinessPartnerまたはOwnerPlantがnullです。")
 		*errs = append(*errs, err)
 		return nil
 	}
 	product := *input.Header.Product
-	businessPartner := *input.Header.OwnerBusinessPartner
-	plant := *input.Header.OwnerPlant
+	businessPartner := *input.Header.OwnerProductionBusinessPartner
+	plant := *input.Header.OwnerProductionPlant
 
 	rows, err := c.db.Query(
 		`SELECT *
@@ -97,8 +97,8 @@ func (c *DPFMAPICaller) Headers(
 	log *logger.Logger,
 ) *[]dpfm_api_output_formatter.Header {
 	where := "WHERE 1 = 1"
-	if input.Header.OwnerBusinessPartner != nil {
-		where = fmt.Sprintf("%s\nAND OwnerBusinessPartner = %v", where, *input.Header.OwnerBusinessPartner)
+	if input.Header.OwnerProductionBusinessPartner != nil {
+		where = fmt.Sprintf("%s\nAND OwnerBusinessPartner = %v", where, *input.Header.OwnerProductionBusinessPartner)
 	}
 	if input.Header.IsMarkedForDeletion != nil {
 		where = fmt.Sprintf("%s\nAND IsMarkedForDeletion = %v", where, *input.Header.IsMarkedForDeletion)
