@@ -29,9 +29,9 @@ func (c *DPFMAPICaller) readSqlProcess(
 			func() {
 				header = c.Header(mtx, input, output, errs, log)
 			}()
-		case "Headers":
+		case "HeaderByOwnerProductionPlantBP":
 			func() {
-				header = c.Headers(mtx, input, output, errs, log)
+				header = c.HeaderByOwnerProductionPlantBP(mtx, input, output, errs, log)
 			}()
 		case "Item":
 			func() {
@@ -60,13 +60,13 @@ func (c *DPFMAPICaller) Header(
 	errs *[]error,
 	log *logger.Logger,
 ) *[]dpfm_api_output_formatter.Header {
-	if input.Header.Product == nil || input.Header.OwnerProductionBusinessPartner == nil || input.Header.OwnerProductionPlant == nil {
-		err := xerrors.New("入力ファイルのProductまたはOwnerBusinessPartnerまたはOwnerPlantがnullです。")
+	if input.Header.Product == nil || input.Header.OwnerProductionPlantBusinessPartner == nil || input.Header.OwnerProductionPlant == nil {
+		err := xerrors.New("入力ファイルのProductまたはOOwnerProductionPlantBusinessPartnerまたはOwnerPlantがnullです。")
 		*errs = append(*errs, err)
 		return nil
 	}
 	product := *input.Header.Product
-	businessPartner := *input.Header.OwnerProductionBusinessPartner
+	businessPartner := *input.Header.OwnerProductionPlantBusinessPartner
 	plant := *input.Header.OwnerProductionPlant
 
 	rows, err := c.db.Query(
@@ -89,7 +89,7 @@ func (c *DPFMAPICaller) Header(
 	return data
 }
 
-func (c *DPFMAPICaller) Headers(
+func (c *DPFMAPICaller) HeaderByOwnerProductionPlantBP(
 	mtx *sync.Mutex,
 	input *dpfm_api_input_reader.SDC,
 	output *dpfm_api_output_formatter.SDC,
@@ -97,8 +97,8 @@ func (c *DPFMAPICaller) Headers(
 	log *logger.Logger,
 ) *[]dpfm_api_output_formatter.Header {
 	where := "WHERE 1 = 1"
-	if input.Header.OwnerProductionBusinessPartner != nil {
-		where = fmt.Sprintf("%s\nAND OwnerBusinessPartner = %v", where, *input.Header.OwnerProductionBusinessPartner)
+	if input.Header.OwnerProductionPlantBusinessPartner != nil {
+		where = fmt.Sprintf("%s\nAND OwnerProductionPlantBusinessPartner = %v", where, *input.Header.OwnerProductionPlantBusinessPartner)
 	}
 	if input.Header.IsMarkedForDeletion != nil {
 		where = fmt.Sprintf("%s\nAND IsMarkedForDeletion = %v", where, *input.Header.IsMarkedForDeletion)
