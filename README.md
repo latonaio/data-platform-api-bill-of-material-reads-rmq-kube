@@ -1,6 +1,6 @@
 # data-platform-api-bill-of-material-reads-rmq-kube
 
-data-platform-api-bill-of-material-reads-rmq-kube は、周辺業務システム を データ連携基盤 と統合することを目的に、API で部品表(BOM)データを登録するマイクロサービスです。  
+data-platform-api-bill-of-material-reads-rmq-kube は、周辺業務システム を データ連携基盤 と統合することを目的に、API で部品表(BOM)データを取得するマイクロサービスです。  
 https://xxx.xxx.io/api/API_BILL_OF_MATERIAL_SRV/creates/
 
 ## 動作環境
@@ -38,8 +38,6 @@ accepter において 下記の例のように、データの種別（＝APIの�
 ```
 	"api_schema": "DPFMBillOfMaterialReads",
 	"accepter": ["Header"],
-	"bill_of_material": null,
-	"deleted": false
 ```
   
 * 全データを取得する際のsample.jsonの記載例(2)  
@@ -49,8 +47,6 @@ accepter において 下記の例のように、データの種別（＝APIの�
 ```
 	"api_schema": "DPFMBillOfMaterialReads",
 	"accepter": ["All"],
-	"bill_of_material": null,
-	"deleted": false
 ```
 
 ## 指定されたデータ種別のコール
@@ -59,7 +55,7 @@ accepter における データ種別 の指定に基づいて DPFM_API_Caller �
 caller.go の func() 毎 の 以下の箇所が、指定された API をコールするソースコードです。  
 
 ```
-func (c *DPFMAPICaller) AsyncBillOfMaterialReads(
+func (c *DPFMAPICaller) AsyncReads(
 	accepter []string,
 	input *dpfm_api_input_reader.SDC,
 	output *dpfm_api_output_formatter.SDC,
@@ -84,4 +80,3 @@ func (c *DPFMAPICaller) AsyncBillOfMaterialReads(
 ```
 XXX
 ```
-

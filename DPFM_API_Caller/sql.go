@@ -29,9 +29,9 @@ func (c *DPFMAPICaller) readSqlProcess(
 			func() {
 				header = c.Header(mtx, input, output, errs, log)
 			}()
-		case "HeaderByOwnerProductionPlantBP":
+		case "HeadersByOwnerProductionPlantBP":
 			func() {
-				header = c.HeaderByOwnerProductionPlantBP(mtx, input, output, errs, log)
+				header = c.HeadersByOwnerProductionPlantBP(mtx, input, output, errs, log)
 			}()
 		case "Item":
 			func() {
@@ -60,19 +60,18 @@ func (c *DPFMAPICaller) Header(
 	errs *[]error,
 	log *logger.Logger,
 ) *[]dpfm_api_output_formatter.Header {
-	if input.Header.Product == nil || input.Header.OwnerProductionPlantBusinessPartner == nil || input.Header.OwnerProductionPlant == nil {
-		err := xerrors.New("入力ファイルのProductまたはOOwnerProductionPlantBusinessPartnerまたはOwnerPlantがnullです。")
+	billOfMaterial := &input.Header.BillOfMaterial
+
+	if billOfMaterial == nil {
+		err := xerrors.New("入力ファイルのBillOfMaterialがnullです。")
 		*errs = append(*errs, err)
 		return nil
 	}
-	product := *input.Header.Product
-	businessPartner := *input.Header.OwnerProductionPlantBusinessPartner
-	plant := *input.Header.OwnerProductionPlant
 
 	rows, err := c.db.Query(
 		`SELECT *
 		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_bill_of_material_header_data
-		WHERE (Product, OwnerBusinessPartner, OwnerPlant) = (?, ?, ?);`, product, businessPartner, plant,
+		WHERE (BillOfMaterial) = (?);`, billOfMaterial,
 	)
 	if err != nil {
 		*errs = append(*errs, err)
@@ -89,7 +88,7 @@ func (c *DPFMAPICaller) Header(
 	return data
 }
 
-func (c *DPFMAPICaller) HeaderByOwnerProductionPlantBP(
+func (c *DPFMAPICaller) HeadersByOwnerProductionPlantBP(
 	mtx *sync.Mutex,
 	input *dpfm_api_input_reader.SDC,
 	output *dpfm_api_output_formatter.SDC,

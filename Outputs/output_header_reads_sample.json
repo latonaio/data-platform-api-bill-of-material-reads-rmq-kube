@@ -1,45 +1,58 @@
 {
-    "connection_key": "request",
-    "result": true,
-    "redis_key": "abcdefg",
-    "filepath": "/var/lib/aion/Data/rededge_sdc/abcdef.json",
-    "api_status_code": 200,
-    "runtime_session_id": "boi9ar543dg91ipdnspi099u231280ab0v8af0ew",
-    "business_partner": 101,
-    "service_label": "BILL_OF_MATERIAL",
-    "api_type": "reads",
-    "message": {
-      "Header": [
-        {
-          "BillOfMaterial": 280000000,
-          "BillOfMaterialType": null,
-          "Product": "A3750",
-          "OwnerBusinessPartner": 201,
-          "OwnerPlant": "TE01",
-          "BOMAlternativeText": null,
-          "BOMHeaderBaseUnit": null,
-          "BOMHeaderQuantityInBaseUnit": null,
-          "ValidityStartDate": "2000-01-01",
-          "ValidityEndDate": "9999-12-31",
-          "CreationDate": "2023-02-28",
-          "LastChangeDate": "2023-02-28",
-          "BillOfMaterialHeaderText": null,
-          "IsMarkedForDeletion": false
-        }
-      ],
-      "Item": null
-    },
-    "api_schema": "DPFMBillOfMaterialReads",
-    "accepter": [
-      "Header"
+  "connection_key": "request",
+  "result": true,
+  "redis_key": "abcdefg",
+  "filepath": "/var/lib/aion/Data/rededge_sdc/abcdef.json",
+  "api_status_code": 200,
+  "runtime_session_id": "boi9ar543dg91ipdnspi099u231280ab0v8af0ew",
+  "business_partner": 101,
+  "service_label": "BILL_OF_MATERIAL",
+  "api_type": "reads",
+  "message": {
+    "Header": [
+      {
+        "BillOfMaterial": 280000001,
+        "BillOfMaterialType": "P0",
+        "SupplyChainRelationshipID": 100000087,
+        "SupplyChainRelationshipDeliveryID": 100000087,
+        "SupplyChainRelationshipDeliveryPlantID": 0,
+        "SupplyChainRelationshipProductionPlantID": 0,
+        "Product": "A3750",
+        "Buyer": 201,
+        "Seller": 201,
+        "DepartureDeliverFromParty": 201,
+        "DepartureDeliverFromPlant": "",
+        "DestinationDeliverToParty": 201,
+        "DestinationDeliverToPlant": "",
+        "OwnerProductionPlantBusinessPartner": 201,
+        "OwnerProductionPlant": "TE01",
+        "ProductBaseUnit": "PC",
+        "ProductDeliveryUnit": "PC",
+        "ProductProductionUnit": "PC",
+        "ProductStandardQuantityInBaseUnit": 1,
+        "ProductStandardQuantityInDeliveryUnit": 1,
+        "ProductStandardQuantityInProductionUnit": 1,
+        "BillOfMaterialHeaderText": null,
+        "ValidityStartDate": "2023-05-20",
+        "ValidityEndDate": "2023-05-20",
+        "CreationDate": "2023-05-15",
+        "LastChangeDate": "9999-12-31",
+        "IsMarkedForDeletion": false
+      }
     ],
-    "deleted": false,
-    "sql_update_result": null,
-    "sql_update_error": "",
-    "subfunc_result": null,
-    "subfunc_error": "",
-    "exconf_result": null,
-    "exconf_error": "",
-    "api_processing_result": true,
-    "api_processing_error": ""
-  }
+    "Item": null
+  },
+  "api_schema": "DPFMBillOfMaterialReads",
+  "accepter": [
+    "Header"
+  ],
+  "deleted": false,
+  "sql_update_result": null,
+  "sql_update_error": "",
+  "subfunc_result": null,
+  "subfunc_error": "",
+  "exconf_result": null,
+  "exconf_error": "",
+  "api_processing_result": true,
+  "api_processing_error": ""
+}

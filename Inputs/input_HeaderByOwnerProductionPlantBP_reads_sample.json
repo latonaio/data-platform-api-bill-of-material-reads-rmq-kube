@@ -15,15 +15,15 @@
 		"SupplyChainRelationshipDeliveryID": null,
 		"SupplyChainRelationshipDeliveryPlantID": null,
 		"SupplyChainRelationshipProductionPlantID": null,
-		"Product: ": "",
+		"Product: ": "A3750",
 		"Buyer": null,
 		"Seller": null,
-		"DepartureDeliverFromParty": null,
-		"DepartureDeliverFromPlant": "",
 		"DestinationDeliverToParty": null,
 		"DestinationDeliverToPlant": "",
+		"DepartureDeliverFromParty": null,
+		"DepartureDeliverFromPlant": "",
 		"OwnerProductionPlantBusinessPartner": 201,
-		"OwnerProductionPlant": "",
+		"OwnerProductionPlant": "TE01",
 		"ProductBaseUnit": "",
 		"ProductDeliveryUnit": "",
 		"ProductProductionUnit": "",
@@ -35,7 +35,7 @@
 		"ValidityEndDate": "",
 		"CreationDate": "",
 		"LastChangeDate": "",
-		"IsMarkedForDeletion": false,
+		"IsMarkedForDeletion": null,
 		"Item": [
 			{
 				"BillOfMaterialItem": null,
@@ -46,10 +46,10 @@
 				"ComponentProduct": "",
 				"ComponentProductBuyer": null,
 				"ComponentProductSeller": null,
-				"ComponentProductDeliverFromParty": null,
-				"ComponentProductDeliverFromPlant": "",
 				"ComponentProductDeliverToParty": null,
 				"ComponentProductDeliverToPlant": "",
+				"ComponentProductDeliverFromParty": null,
+				"ComponentProductDeliverFromPlant": "",
 				"StockConfirmationBusinessPartner": null,
 				"StockConfirmationPlant": "",
 				"ComponentProductStandardQuantityInBaseUnit": null,
@@ -58,17 +58,40 @@
 				"ComponentProductDeliveryUnit": "",
 				"ComponentProductStandardScrapInPercent": null,
 				"IsMarkedForBackflush": null,
+				"BillOfMaterialItemText": "",
 				"ValidityStartDate": "",
 				"ValidityEndDate": "",
-				"BillOfMaterialItemText": "",
 				"CreationDate": "",
 				"LastChangeDate": "",
 				"IsMarkedForDeletion": null
+			}
+		],
+		"HeaderDoc": [
+			{
+				"DocType": "",
+				"DocVersionID": null,
+				"DocID": "",
+				"FileExtension": "",
+				"FileName": "",
+				"FilePath": "",
+				"DocIssuerBusinessPartner": null,
+				"ItemDoc": [
+					{
+						"BillOfMaterialItem": null,
+						"DocType": "",
+						"DocVersionID": null,
+						"DocID": "",
+						"FileExtension": "",
+						"FileName": "",
+						"FilePath": "",
+						"DocIssuerBusinessPartner": null
+					}
+				]
 			}
 		]
 	},
 	"api_schema": "DPFMBillOfMaterialReads",
 	"accepter": [
-		"HeaderByOwnerProductionPlantBP"
+		"HeadersByOwnerProductionPlantBP"
 	]
 }
