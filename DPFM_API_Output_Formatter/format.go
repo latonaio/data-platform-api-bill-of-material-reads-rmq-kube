@@ -175,3 +175,79 @@ func ConvertToItem(rows *sql.Rows) (*[]Item, error) {
 
 	return &item, nil
 }
+
+func ConvertToItemPricingElement(rows *sql.Rows) (*[]ItemPricingElement, error) {
+	defer rows.Close()
+	itemPricingElement := make([]ItemPricingElement, 0)
+
+	i := 0
+	for rows.Next() {
+		i++
+		pm := &requests.ItemPricingElement{}
+
+		err := rows.Scan(
+			&pm.BillOfMaterial,
+			&pm.BillOfMaterialItem,
+			&pm.PricingProcedureCounter,
+			&pm.SupplyChainRelationshipID,
+			&pm.ComponentProductBuyer,
+			&pm.ComponentProductSeller,
+			&pm.ConditionRecord,
+			&pm.ConditionSequentialNumber,
+			&pm.ConditionType,
+			&pm.PricingDate,
+			&pm.ConditionRateValue,
+			&pm.ConditionRateValueUnit,
+			&pm.ConditionScaleQuantity,
+			&pm.ConditionCurrency,
+			&pm.ConditionQuantity,
+			&pm.TaxCode,
+			&pm.ConditionAmount,
+			&pm.TransactionCurrency,
+			&pm.ConditionIsManuallyChanged,
+			&pm.CreationDate,
+			&pm.LastChangeDate,
+			&pm.IsCancelled,
+			&pm.IsMarkedForDeletion,
+		)
+		if err != nil {
+			fmt.Printf("err = %+v \n", err)
+			return &itemPricingElement, err
+		}
+
+		data := pm
+		itemPricingElement = append(itemPricingElement, ItemPricingElement{
+			BillOfMaterial:             data.BillOfMaterial,
+			BillOfMaterialItem:         data.BillOfMaterialItem,
+			PricingProcedureCounter:    data.PricingProcedureCounter,
+			SupplyChainRelationshipID:  data.SupplyChainRelationshipID,
+			ComponentProductBuyer:      data.ComponentProductBuyer,
+			ComponentProductSeller:     data.ComponentProductSeller,
+			ConditionRecord:            data.ConditionRecord,
+			ConditionSequentialNumber:  data.ConditionSequentialNumber,
+			ConditionType:              data.ConditionType,
+			PricingDate:                data.PricingDate,
+			ConditionRateValue:         data.ConditionRateValue,
+			ConditionRateValueUnit:     data.ConditionRateValueUnit,
+			ConditionScaleQuantity:     data.ConditionScaleQuantity,
+			ConditionCurrency:          data.ConditionCurrency,
+			ConditionQuantity:          data.ConditionQuantity,
+			TaxCode:                    data.TaxCode,
+			ConditionAmount:            data.ConditionAmount,
+			TransactionCurrency:        data.TransactionCurrency,
+			ConditionIsManuallyChanged: data.ConditionIsManuallyChanged,
+			CreationDate:               data.CreationDate,
+			CreationTime:               data.CreationTime,
+			LastChangeDate:             data.LastChangeDate,
+			LastChangeTime:             data.LastChangeTime,
+			IsCancelled:                data.IsCancelled,
+			IsMarkedForDeletion:        data.IsMarkedForDeletion,
+		})
+	}
+	if i == 0 {
+		fmt.Printf("DBに対象のレコードが存在しません。")
+		return &itemPricingElement, nil
+	}
+
+	return &itemPricingElement, nil
+}

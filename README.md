@@ -18,9 +18,9 @@ APIサービス URL: https://xxx.xxx.io/api/API_BILL_OF_MATERIAL_SRV/reads/
 ## 本レポジトリ に 含まれる API名
 data-platform-api-bill-of-material-reads-rmq-kube には、次の API をコールするためのリソースが含まれています。  
 
-* A_Header（データ連携基盤 部品表(BOM) - ヘッダデータ）
-* A_Item（データ連携基盤 部品表(BOM) - 明細データ）
- 
+* A_Header（部品表(BOM) - ヘッダ）
+* A_Item（部品表(BOM) - 明細）
+* A_ItemPricingElement（部品表(BOM) - 明細価格決定要素） 
 
 ## API への 値入力条件 の 初期値
 data-platform-api-bill-of-material-reads-rmq-kube において、API への値入力条件の初期値は、入力ファイルレイアウトの種別毎に、次の通りとなっています。  

@@ -23,6 +23,7 @@ func (c *DPFMAPICaller) readSqlProcess(
 ) interface{} {
 	var header *[]dpfm_api_output_formatter.Header
 	var item *[]dpfm_api_output_formatter.Item
+	var itemPricingElement *[]dpfm_api_output_formatter.ItemPricingElement
 	for _, fn := range accepter {
 		switch fn {
 		case "Header":
@@ -41,13 +42,22 @@ func (c *DPFMAPICaller) readSqlProcess(
 			func() {
 				item = c.Items(mtx, input, output, errs, log)
 			}()
+		case "ItemPricingElement":
+			func() {
+				itemPricingElement = c.ItemPricingElement(mtx, input, output, errs, log)
+			}()
+		case "ItemPricingElements":
+			func() {
+				itemPricingElement = c.ItemPricingElements(mtx, input, output, errs, log)
+			}()
 		default:
 		}
 	}
 
 	data := &dpfm_api_output_formatter.Message{
-		Header: header,
-		Item:   item,
+		Header:				header,
+		Item:				item,
+		ItemPricingElement:	itemPricingElement,
 	}
 
 	return data
@@ -60,9 +70,9 @@ func (c *DPFMAPICaller) Header(
 	errs *[]error,
 	log *logger.Logger,
 ) *[]dpfm_api_output_formatter.Header {
-	billOfMaterial := &input.Header.BillOfMaterial
+	header := &input.Header.BillOfMaterial
 
-	if billOfMaterial == nil {
+	if header == nil {
 		err := xerrors.New("入力ファイルのBillOfMaterialがnullです。")
 		*errs = append(*errs, err)
 		return nil
@@ -71,7 +81,7 @@ func (c *DPFMAPICaller) Header(
 	rows, err := c.db.Query(
 		`SELECT *
 		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_bill_of_material_header_data
-		WHERE (BillOfMaterial) = (?);`, billOfMaterial,
+		WHERE (BillOfMaterial) = (?);`, header,
 	)
 	if err != nil {
 		*errs = append(*errs, err)
@@ -131,12 +141,12 @@ func (c *DPFMAPICaller) Item(
 	log *logger.Logger,
 ) *[]dpfm_api_output_formatter.Item {
 	var args []interface{}
-	billOfMaterial := input.Header.BillOfMaterial
+	header := input.Header.BillOfMaterial
 	item := input.Header.Item
 
 	cnt := 0
 	for _, v := range item {
-		args = append(args, billOfMaterial, v.BillOfMaterialItem)
+		args = append(args, header, v.BillOfMaterialItem)
 		cnt++
 	}
 
@@ -199,3 +209,85 @@ func (c *DPFMAPICaller) Items(
 
 	return data
 }
+
+func (c *DPFMAPICaller) ItemPricingElement(
+	mtx *sync.Mutex,
+	input *dpfm_api_input_reader.SDC,
+	output *dpfm_api_output_formatter.SDC,
+	errs *[]error,
+	log *logger.Logger,
+) *[]dpfm_api_output_formatter.ItemPricingElement {
+	var args []interface{}
+	header := input.Header.BillOfMaterial
+//	item := input.Header.Item
+	itemPricingElement := input.Header.ItemPricingElement
+
+	cnt := 0
+	for _, v := range itemPricingElement {
+		args = append(args, header, v.BillOfMaterialItem, v.PricingProcedureCounter)
+		cnt++
+	}
+
+	repeat := strings.Repeat("(?,?,?),", cnt-1) + "(?,?,?)"
+	rows, err := c.db.Query(
+		`SELECT *
+		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_bill_of_material_item_pricing_element_data
+		WHERE (BillOfMaterial, BillOfMaterialItem, PricingProcedureCounter) IN ( `+repeat+` );`, args...,
+	)
+	if err != nil {
+		*errs = append(*errs, err)
+		return nil
+	}
+	defer rows.Close()
+
+	data, err := dpfm_api_output_formatter.ConvertToItemPricingElement(rows)
+	if err != nil {
+		*errs = append(*errs, err)
+		return nil
+	}
+
+	return data
+}
+
+func (c *DPFMAPICaller) ItemPricingElements(
+	mtx *sync.Mutex,
+	input *dpfm_api_input_reader.SDC,
+	output *dpfm_api_output_formatter.SDC,
+	errs *[]error,
+	log *logger.Logger,
+) *[]dpfm_api_output_formatter.ItemPricingElement {
+	item := &dpfm_api_input_reader.ItemPricingElement{}
+	if len(input.Header.ItemPricingElement) > 0 {
+		itemPricingElement = &input.Header.ItemPricingElement[0]
+	}
+
+	where := fmt.Sprintf("WHERE BillOfMaterial = %v", input.Header.BillOfMaterial)
+	if item != nil {
+		if item.BillOfMaterialItem != nil {
+			where = fmt.Sprintf("%s\nAND BillOfMaterialItem = %v", where, *item.BillOfMaterialItem)
+		}
+		if item.IsMarkedForDeletion != nil {
+			where = fmt.Sprintf("%s\nAND IsMarkedForDeletion = %v", where, *item.IsMarkedForDeletion)
+		}
+	}
+
+	rows, err := c.db.Query(
+		`SELECT *
+		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_bill_of_material_item_pricing_element_data
+		` + where + `;`,
+	)
+	if err != nil {
+		*errs = append(*errs, err)
+		return nil
+	}
+	defer rows.Close()
+
+	data, err := dpfm_api_output_formatter.ConvertToItemPricingElement(rows)
+	if err != nil {
+		*errs = append(*errs, err)
+		return nil
+	}
+
+	return data
+}
+

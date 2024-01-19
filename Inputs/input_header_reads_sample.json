@@ -5,11 +5,11 @@
 	"filepath": "/var/lib/aion/Data/rededge_sdc/abcdef.json",
 	"api_status_code": 200,
 	"runtime_session_id": "boi9ar543dg91ipdnspi099u231280ab0v8af0ew",
-	"business_partner": 201,
+	"business_partner": null,
 	"service_label": "BILL_OF_MATERIAL",
 	"api_type": "reads",
 	"BillOfMaterial": {
-		"BillOfMaterial": 280000000,
+		"BillOfMaterial": null,
 		"BillOfMaterialType": "",
 		"SupplyChainRelationshipID": null,
 		"SupplyChainRelationshipDeliveryID": null,
@@ -86,12 +86,37 @@
 						"FilePath": "",
 						"DocIssuerBusinessPartner": null
 					}
+				],
+				"ItemPricingElement": [
+					{
+						"PricingProcedureCounter": null,
+						"SupplyChainRelationshipID": null,
+						"ComponentProductBuyer": null,
+						"ComponentProductSeller": null,
+						"ConditionRecord": null,
+						"ConditionSequentialNumber": null,
+						"ConditionType": "",
+						"PricingDate": "",
+						"ConditionRateValue": null,
+						"ConditionRateValueUnit": null,
+						"ConditionScaleQuantity": null,
+						"ConditionCurrency": "",
+						"ConditionQuantity": null,
+						"TaxCode": "",
+						"ConditionAmount": null,
+						"TransactionCurrency": "",
+						"ConditionIsManuallyChanged": null,
+						"CreationDate": "",
+						"LastChangeDate": "",
+						"IsCancelled": null,
+						"IsMarkedForDeletion": null
+					}
 				]
 			}
 		]
 	},
 	"api_schema": "DPFMBillOfMaterialReads",
 	"accepter": [
-		"Header"
+		"All"
 	]
 }
